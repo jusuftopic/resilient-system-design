@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">Incident overview</mat-toolbar>
+
+<div class="table-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search failures">
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <mat-text-column name="event"></mat-text-column>
+    <mat-text-column name="failReason"></mat-text-column>
+  </table>
+
+</div>
