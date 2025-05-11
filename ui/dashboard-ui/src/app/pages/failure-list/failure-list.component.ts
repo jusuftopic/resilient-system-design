@@ -2,7 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { IncidentService } from '../../api/service/incident.service';
-import { MatTable, MatTableDataSource, MatTextColumn } from '@angular/material/table';
+import {
+  MatCell, MatCellDef,
+  MatColumnDef,
+  MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
+  MatTable,
+  MatTableDataSource
+} from '@angular/material/table';
 
 @Component({
   selector: 'app-failure-list',
@@ -13,7 +19,15 @@ import { MatTable, MatTableDataSource, MatTextColumn } from '@angular/material/t
     MatInput,
     MatFormField,
     MatTable,
-    MatTextColumn
+    MatColumnDef,
+    MatHeaderCell,
+    MatCell,
+    MatHeaderRow,
+    MatRow,
+    MatHeaderRowDef,
+    MatCellDef,
+    MatHeaderCellDef,
+    MatRowDef
   ],
   templateUrl: './failure-list.component.html',
   styleUrl: './failure-list.component.scss',
@@ -22,6 +36,7 @@ import { MatTable, MatTableDataSource, MatTextColumn } from '@angular/material/t
 export class FailureListComponent implements OnInit {
 
   /* data */
+  displayedColumns: string[] = ['event', 'failReason'];
   dataSource = new MatTableDataSource<any>()
 
   constructor(private incidentService: IncidentService) {

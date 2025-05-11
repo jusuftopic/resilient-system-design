@@ -1,4 +1,12 @@
 package org.example.workflowprocessor.dto;
 
-public class IncidentDTO {
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+public class IncidentDTO
+{
+    private String event;
+    private String failReason;
 }

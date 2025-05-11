@@ -7,8 +7,20 @@
   </mat-form-field>
 
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-    <mat-text-column name="event"></mat-text-column>
-    <mat-text-column name="failReason"></mat-text-column>
+    <!-- Event Column -->
+    <ng-container matColumnDef="event">
+      <th mat-header-cell *matHeaderCellDef> Event </th>
+      <td mat-cell *matCellDef="let element"> {{ element.event }} </td>
+    </ng-container>
+
+    <!-- Fail Reason Column -->
+    <ng-container matColumnDef="failReason">
+      <th mat-header-cell *matHeaderCellDef> Reason </th>
+      <td mat-cell *matCellDef="let element"> {{ element.failReason }} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
 </div>
