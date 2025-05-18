@@ -1,10 +1,10 @@
 spring:
   application:
-    name: event-consumer
+    name: invoice-service
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
-      group-id: event-consumer-group
+      group-id: invoice-consumer-group
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: '*'

@@ -17,8 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PaymentCreatedEvent
 {
+    private String eventId;
     private String paymentReference;
-    private BigDecimal amount;
-    private String currency;
     private Long invoiceId;
 }

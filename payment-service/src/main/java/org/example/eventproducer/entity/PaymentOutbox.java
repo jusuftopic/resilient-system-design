@@ -64,7 +64,6 @@ public class PaymentOutbox
 
     @PrePersist
     public void prePersist() {
-        this.eventId = UUID.randomUUID();
         this.occurredAt = LocalDateTime.now();
         if (this.status == null) {
             this.status = PaymentOutboxStatus.PENDING;

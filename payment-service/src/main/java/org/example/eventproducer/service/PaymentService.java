@@ -1,5 +1,7 @@
 package org.example.eventproducer.service;
 
+import java.util.UUID;
+
 import jakarta.transaction.Transactional;
 
 import org.example.dto.PaymentCreatedEvent;
@@ -43,20 +45,21 @@ public class PaymentService
         final Payment saved = paymentRepository.save(
             paymentMapper.map(request));
 
+        final UUID eventId = UUID.randomUUID();
         final PaymentOutbox outbox = new PaymentOutbox();
+        outbox.setEventId(eventId);
         outbox.setAggregateId(saved.getPaymentReference());
         outbox.setEventType("PAYMENT_CREATED");
-        outbox.setPayload(createPaymentPayload(saved));
+        outbox.setPayload(createPaymentPayload(saved, eventId));
         paymentOutboxRepository.save(outbox);
 
     }
 
-    private String createPaymentPayload(Payment payment)
+    private String createPaymentPayload(Payment payment, UUID eventId)
     {
        final PaymentCreatedEvent event = PaymentCreatedEvent.builder()
+           .eventId(eventId.toString())
            .paymentReference(payment.getPaymentReference())
-           .amount(payment.getAmount())
-           .currency(payment.getCurrency())
            .invoiceId(payment.getInvoiceId())
            .build();
 
