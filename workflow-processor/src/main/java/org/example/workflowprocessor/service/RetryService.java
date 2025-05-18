@@ -1,6 +1,6 @@
 package org.example.workflowprocessor.service;
 
-import org.example.dto.FailureEvent;
+import org.example.dto.PaymentCreatedEvent;
 import org.example.workflowprocessor.persistance.IncidentStore;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class RetryService
     private final IncidentStore incidentStore;
 
 
-    public void retry(final FailureEvent event)
+    public void retry(final PaymentCreatedEvent event)
     {
         try
         {

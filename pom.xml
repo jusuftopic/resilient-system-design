@@ -16,8 +16,8 @@
 
   <modules>
     <module>commons</module>
-    <module>event-producer</module>
-    <module>event-consumer</module>
+    <module>payment-service</module>
+    <module>invoice-service</module>
     <module>workflow-processor</module>
   </modules>
 </project>

@@ -1,7 +1,9 @@
 package org.example;
 
+/**
+ * Common constants used across the applications.
+ */
 public final class CommonConstants
 {
-    public static final String KAFKA_BUSINESS_TOPIC = "business-events";
-    public static final String KAFKA_FAILURE_TOPIC = "failure-events";
+    public static final String KAFKA_PAYMENT_EVENTS_TOPIC = "payment-events";
 }
