@@ -3,7 +3,10 @@ package org.example.authservice.controller;
 
 import java.util.Objects;
 
+import jakarta.validation.Valid;
+
 import org.example.authservice.dto.request.LoginRequest;
+import org.example.authservice.dto.request.RefreshTokenRequest;
 import org.example.authservice.dto.request.RegisterRequest;
 import org.example.authservice.dto.response.AuthenticationResponse;
 import org.example.authservice.service.AuthService;
@@ -32,7 +35,7 @@ public class AuthController
      * @return a response entity containing the authentication response
      */
      @PostMapping("/login")
-     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest loginRequest) {
+     public ResponseEntity<AuthenticationResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
          Objects.requireNonNull(loginRequest, "loginRequest must not be null");
          return ResponseEntity.ok(authService.login(loginRequest));
      }
@@ -44,7 +47,7 @@ public class AuthController
      * @return a response entity containing the authentication response
      */
      @PostMapping("/register")
-     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) {
+     public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
          Objects.requireNonNull(registerRequest, "registerRequest must not be null");
          return ResponseEntity.ok(authService.register(registerRequest));
      }
@@ -57,9 +60,9 @@ public class AuthController
      */
     @PostMapping("/refresh-token")
     public ResponseEntity<AuthenticationResponse> refreshToken(
-        @RequestBody String refreshToken) {
+        @RequestBody @Valid RefreshTokenRequest refreshToken) {
         Objects.requireNonNull(refreshToken, "refreshToken must not be null");
-        return ResponseEntity.ok(authService.refreshToken(refreshToken));
+        return ResponseEntity.ok(authService.refreshToken(refreshToken.getRefreshToken()));
     }
 
 
@@ -70,9 +73,9 @@ public class AuthController
      * @return a response entity indicating successful logout
      */
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestBody String refreshToken) {
+    public ResponseEntity<Void> logout(@RequestBody @Valid RefreshTokenRequest refreshToken) {
         Objects.requireNonNull(refreshToken, "refreshToken must not be null");
-        authService.logout(refreshToken);
+        authService.logout(refreshToken.getRefreshToken());
         return ResponseEntity.ok().build();
     }
 

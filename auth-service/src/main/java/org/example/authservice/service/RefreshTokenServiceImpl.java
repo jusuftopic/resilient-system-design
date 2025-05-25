@@ -10,6 +10,7 @@ import org.example.authservice.entity.UserInfo;
 import org.example.authservice.mapper.RefreshTokenMapper;
 import org.example.authservice.repository.RefreshTokenRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +26,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService
     private final UserService userService;
 
     @Override
+    @Transactional
     public RefreshTokenDTO generateToken(String email)
     {
         final UserInfo user = userService.getByEmail(email)
@@ -41,20 +43,33 @@ public class RefreshTokenServiceImpl implements RefreshTokenService
     }
 
     @Override
-    public Optional<RefreshTokenDTO> getByToken(String token)
+    @Transactional
+    public RefreshTokenDTO rotateToken(String token)
     {
-        return refreshTokenRepository.findByToken(token)
-            .map(refreshTokenMapper::map);
+        final RefreshToken existingToken = refreshTokenRepository.findByToken(token)
+            .orElseThrow(() -> new IllegalStateException("Invalid refresh token"));
+
+        validateToken(existingToken);
+        existingToken.setRevoked(true);
+        refreshTokenRepository.save(existingToken);
+
+        return generateToken(existingToken.getUser().getEmail());
     }
 
-    @Override
-    public void validateToken(RefreshTokenDTO token)
+
+    private void validateToken(RefreshToken token)
     {
         if (token.getExpiresAt().isBefore(Instant.now()))
         {
             refreshTokenRepository.deleteById(token.getId());
             throw new RuntimeException("Refresh token expired");
         }
+        if (token.isRevoked())
+        {
+            refreshTokenRepository.deleteById(token.getId());
+            throw new RuntimeException("Token is revoked expired");
+        }
+
     }
 
     @Override
