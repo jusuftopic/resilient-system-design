@@ -27,3 +27,14 @@ spring:
 
 server:
   port: 8082
+
+resilience4j:
+  thread-pool-bulkhead:
+    instances:
+      invoiceEventProcessor:
+        # 3 threads are always kept alive
+        core-thread-pool-size: 3
+        # if 3 core threads are busy, 2 more are created temporarily
+        max-thread-pool-size: 5
+        # if all 5 threads are busy, 10 events can be queued before starting rejecting
+        queue-capacity: 10

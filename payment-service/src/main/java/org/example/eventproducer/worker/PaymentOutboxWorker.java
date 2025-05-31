@@ -40,7 +40,7 @@ public class PaymentOutboxWorker
         {
             try
             {
-                kafkaTemplate.send(CommonConstants.KAFKA_PAYMENT_EVENTS_TOPIC, event.getPayload());
+                kafkaTemplate.send(CommonConstants.KAFKA_PAYMENT_CREATED_EVENT_TOPIC, event.getPayload());
                 event.setStatus(PaymentOutboxStatus.SENT);
                 event.setProcessedAt(LocalDateTime.now());
                 log.info("Payment outbox event sent successfully: {}", event.getEventId());

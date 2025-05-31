@@ -19,6 +19,5 @@
     <module>payment-service</module>
     <module>invoice-service</module>
     <module>workflow-processor</module>
-    <module>auth-service</module>
   </modules>
 </project>

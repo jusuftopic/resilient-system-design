@@ -28,8 +28,19 @@ public class PaymentCreatedEventProcessor
      * Processes the payment created event.
      * @param payload the payment created event payload
      */
-    @KafkaListener(topics = CommonConstants.KAFKA_PAYMENT_EVENTS_TOPIC, groupId = "invoice-consumer-group")
+    @KafkaListener(topics = CommonConstants.KAFKA_PAYMENT_CREATED_EVENT_TOPIC, groupId = "invoice-consumer-group")
     public void process(String payload)
+    {
+        processInternal(payload);
+    }
+
+    @KafkaListener(topics = CommonConstants.KAFKA_PAYMENT_CREATED_EVENT_5S_RETRY_TOPIC, groupId = "invoice-consumer-group")
+    public void processRetry(String payload)
+    {
+        processInternal(payload);
+    }
+
+    private void processInternal(String payload)
     {
         try
         {

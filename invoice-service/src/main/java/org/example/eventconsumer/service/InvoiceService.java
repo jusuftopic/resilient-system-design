@@ -1,8 +1,10 @@
 package org.example.eventconsumer.service;
 
-import java.time.LocalDateTime;
 
 import jakarta.transaction.Transactional;
+
+import io.github.resilience4j.bulkhead.BulkheadFullException;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 
 import org.example.dto.PaymentCreatedEvent;
 import org.example.eventconsumer.entity.Invoice;
@@ -25,6 +27,7 @@ public class InvoiceService
 {
     private final InvoiceInboxRepository invoiceInboxRepository;
     private final InvoiceRepository invoiceRepository;
+    private final InvoiceFallbackService invoiceFallbackService;
 
     /**
      * Updates the invoice based on the payment created event.
@@ -32,6 +35,8 @@ public class InvoiceService
      * @param payload the payment created event payload
      */
     @Transactional
+    @Bulkhead(name = "invoiceEventProcessor", type = Bulkhead.Type.THREADPOOL,
+        fallbackMethod = "updateInvoiceFallback")
     public void updateInvoice(final PaymentCreatedEvent payload)
     {
         if (invoiceInboxRepository.existsById(payload.getEventId()))
@@ -53,5 +58,11 @@ public class InvoiceService
         invoiceInboxRepository.save(invoiceInbox);
     }
 
+    public void updateInvoiceFallback(final PaymentCreatedEvent payload, final BulkheadFullException e)
+    {
+        log.error("Failed to process invoice {} for event {}: {}", payload.getInvoiceId(), payload.getEventId(),
+            e.getMessage());
+        invoiceFallbackService.sendInvoiceUpdate(payload);
+    }
 
 }
